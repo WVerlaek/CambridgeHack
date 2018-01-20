@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "620483786004",
+    "firebase_url": "https://cambridgehack18.firebaseio.com",
+    "project_id": "cambridgehack18",
+    "storage_bucket": "cambridgehack18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620483786004:android:1020599281b7185d",
+        "android_client_info": {
+          "package_name": "com.wverlaek.cambridgehack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620483786004-40te02ss5qs3hlskcuv06cngu1a8j8t3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wverlaek.cambridgehack",
+            "certificate_hash": "43e7ca60bf8bed4043b7d91bd99fbc554a703ec9"
+          }
+        },
+        {
+          "client_id": "620483786004-bhf31fops1k8vtg7tndrhh93d4vvthtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCExQXTfH-o6Kyoog1M9x-g_6iybl7tutc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620483786004-bhf31fops1k8vtg7tndrhh93d4vvthtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
