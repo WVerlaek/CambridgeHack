@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import com.google.firebase.database.DatabaseError
 import com.wverlaek.cambridgehack.R
 import com.wverlaek.cambridgehack.database.ProfileListener
@@ -18,6 +17,7 @@ import org.jetbrains.anko.toast
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
+import com.wverlaek.cambridgehack.util.Listener
 import java.util.*
 
 
@@ -28,6 +28,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var uid: String
     private var storage = FirebaseStorage.getInstance()
     private var storageRef = storage.getReference()
+    private var mArrayUri = ArrayList<Uri>()
 
 
     companion object {
@@ -56,33 +57,42 @@ class ProfileActivity : AppCompatActivity() {
                     loadingFrame.visibility = View.GONE
 
                     btn_submit.setOnClickListener {
-                        val newProf = Profile();
+                        FaceDetection().createPerson(last_name_field.text.toString(),
+                                object:Listener<UUID> {
+                                    override fun onComplete(result: UUID) {
+                                        val newProf = Profile();
 
-                        newProf.uid = uid
-                        newProf.firstName = first_name_field.text.toString()
-                        newProf.lastName = last_name_field.text.toString()
-                        newProf.title = title_field.text.toString()
-                        newProf.organization = organization_field.text.toString()
-                        newProf.facebookName = facebook_field.text.toString()
-                        newProf.githubName = github_field.text.toString()
-                        newProf.linkedInName = linkedIn_field.text.toString()
+                                        newProf.uid = uid
+                                        newProf.firstName = first_name_field.text.toString()
+                                        newProf.lastName = last_name_field.text.toString()
+                                        newProf.title = title_field.text.toString()
+                                        newProf.organization = organization_field.text.toString()
+                                        newProf.facebookName = facebook_field.text.toString()
+                                        newProf.githubName = github_field.text.toString()
+                                        newProf.linkedInName = linkedIn_field.text.toString()
+                                        newProf.personId = result.toString()
 
-                        repo.updateProfile(newProf)
-                        toast("Created your profile")
-                        startActivity(intentFor<FaceScanActivity>())
-                        // TODO: start activity real app
-                        finish()
+                                        repo.updateProfile(newProf)
+
+                                        toast("Created your profile")
+                                        startActivity(intentFor<FaceScanActivity>())
+                                        // TODO: start activity real app
+                                        finish()
+                                    }
+
+                                    override fun onError() {
+                                        toast("Failed to create profile")
+                                    }
+                                })
+
                     }
 
                     btn_photo.setOnClickListener {
-                        val getIntent = Intent(Intent.ACTION_GET_CONTENT)
-                        getIntent.type = "image/*"
-
-                        val pickIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                        pickIntent.type = "image/*"
-
-                        val chooserIntent = Intent.createChooser(getIntent, "Select Image")
-                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
+                        val intent = Intent()
+                        intent.type = "image/*"
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                        intent.action = Intent.ACTION_GET_CONTENT
+                        val chooserIntent = Intent.createChooser(intent, "Select Image")
 
                         startActivityForResult(chooserIntent, PICK_IMAGE)
                     }
@@ -95,25 +105,31 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "onActivityResult")
-        if (requestCode == PICK_IMAGE) {
-            val uri : Uri = data.getData()
-            Log.d(TAG, "selected image: " + uri)
-            val ref = storageRef.child("images/" + uid)
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            mArrayUri = ArrayList()
+            if (data.getData() != null) {
+                val uri: Uri = data.getData()
+                Log.d(TAG, "selected image: " + uri)
+                val ref = storageRef.child("images/" + uid)
+                ref.putFile(uri)
 
-            FaceDetection().uploadImage(UUID.fromString("f1cbfc9b-0840-4fa3-87eb-171f81cec429"),
-                    object : com.wverlaek.cambridgehack.util.Listener<Unit?> {
-                        override fun onComplete(result: Unit?) {}
-                        override fun onError() {}
-                    },
-                    getContentResolver().openInputStream(uri))
+                toast("Your picture is stored ")
 
-            ref.putFile(uri)
+                mArrayUri.add(uri)
+            } else if (data.getClipData() != null) {
+                val mClipData = data.clipData
 
-            toast("Your picture is stored ")
-
-            profile_photo.setImageURI(uri)
+                for (i in 0 until mClipData.itemCount) {
+                    val item = mClipData.getItemAt(i)
+                    val uri = item.uri
+                    mArrayUri.add(uri)
+                }
+                val ref = storageRef.child("images/" + uid)
+                ref.putFile(mArrayUri.first())
+            }
+            profile_photo.setImageURI(mArrayUri.first())
         }
     }
 }
