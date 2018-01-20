@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "620483786004-a5npjdhktdolvoh21l1h69jvdf7gc1ie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wverlaek.cambridgehack",
+            "certificate_hash": "ff9945851419d8c615c9b75b98a6866a9a935529"
+          }
+        },
+        {
           "client_id": "620483786004-40te02ss5qs3hlskcuv06cngu1a8j8t3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

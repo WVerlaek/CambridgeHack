@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.data.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseError
 import com.wverlaek.cambridgehack.R
 import com.wverlaek.cambridgehack.database.ProfileListener
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val rcSignIn = 123
     private val TAG = "MainActivity"
+    private lateinit var auth : FirebaseAuth
 
     private val providers = listOf(
             AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onResume() {
@@ -40,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkUserLogin() {
-        val user = FirebaseAuth.getInstance().currentUser
+        val user = auth.currentUser
         if (user == null) {
             startActivityForResult(
                     AuthUI.getInstance()
@@ -52,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                     rcSignIn)
         } else {
             // continue to main activity / app
-            onLoggedIn()
+            onLoggedIn(user)
         }
     }
 
@@ -63,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                onLoggedIn()
+                onLoggedIn(auth.currentUser!!)
             } else {
                 // Sign in failed, check response for error code
                 finish()
@@ -71,13 +76,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openNextActivity() {
-        val profInt = Intent(this, ProfileActivity::class.java)
-        profInt.putExtra("UID", "gvd")
-        startActivity(profInt)
-    }
 
-    private fun onLoggedIn() {
-        startActivity(intentFor<FaceScanActivity>())
+    private fun onLoggedIn(user: FirebaseUser) {
+        startActivity(ProfileActivity.createIntent(this, user.uid))
+//        startActivity(intentFor<FaceScanActivity>())
     }
 }

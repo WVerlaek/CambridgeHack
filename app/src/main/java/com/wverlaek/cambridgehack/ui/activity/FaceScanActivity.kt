@@ -103,5 +103,6 @@ class FaceScanActivity : AppCompatActivity(), AnkoLogger {
     override fun onPause() {
         faceScanner.pause()
         super.onPause()
+
     }
 }
