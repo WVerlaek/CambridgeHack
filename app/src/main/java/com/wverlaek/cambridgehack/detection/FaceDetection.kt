@@ -54,10 +54,10 @@ class FaceDetection {
         }
     }
 
-    fun uploadImage(uuid: UUID, listener: Listener<Unit?>, img: InputStream) {
+    fun uploadImage(pid: UUID, listener: Listener<Unit?>, img: InputStream) {
         doAsync {
             try {
-                faceClient.addPersonFace("c_h", uuid, img, null, null)
+                faceClient.addPersonFace("c_h", pid, img, null, null)
                 uiThread { listener.onComplete(null) }
             } catch (e: ClientException) {
                 uiThread { listener.onError() }

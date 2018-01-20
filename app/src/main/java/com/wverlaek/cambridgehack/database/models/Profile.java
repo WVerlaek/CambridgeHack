@@ -21,6 +21,7 @@ public class Profile {
 //    public Image getProfilePhoto() {
 //
 //    }
+    private String personId;
 
     public Profile() {}
 
