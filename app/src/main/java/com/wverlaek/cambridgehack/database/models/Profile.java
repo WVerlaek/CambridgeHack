@@ -16,18 +16,12 @@ public class Profile {
     public String linkedInName;
     public String githubName;
     public String facebookName;
+    public String personId;
 
     //TODO
 //    public Image getProfilePhoto() {
 //
 //    }
-    private String personId;
 
     public Profile() {}
-
-//    public Profile(String firstName, String lastNamet, String facebookLink, String background) {
-//        this.name = name;
-//        this.facebookLink = facebookLink;
-//        this.background = background;
-//    }
 }

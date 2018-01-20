@@ -2,9 +2,9 @@ import http.client, urllib.request, urllib.parse, urllib.error, base64, sys, os
 import urllib
 import click
 
-key = 'a5a4db57b7ab45f8ad477e55174106c3'
+key = '410cf10444e4445cbb43990e343227c5'
 
-    base_url = 'westcentralus.api.cognitive.microsoft.com'
+base_url = 'westeurope.api.cognitive.microsoft.com'
 
 headers = {
     # Request headers.
