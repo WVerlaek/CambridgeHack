@@ -21,9 +21,7 @@ import org.jetbrains.anko.intentFor
 class MainActivity : AppCompatActivity() {
 
     private val rcSignIn = 123
-    private val TAG = "Main"
-
-    private val REQUEST_CAMERA = 1
+    private val TAG = "MainActivity"
 
     private val providers = listOf(
             AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()
@@ -34,21 +32,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (!Permissions.hasCameraPermission(this)) {
-            Permissions.requestCameraPermission(this, REQUEST_CAMERA)
-        } else {
-            openNextActivity()
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        tryAccess()
-
+        checkUserLogin()
     }
 
-    private fun tryAccess() {
+    private fun checkUserLogin() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             startActivityForResult(
@@ -61,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                     rcSignIn)
         } else {
             // continue to main activity / app
+            onLoggedIn()
         }
     }
 
@@ -71,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-//                tryAccess()
+                onLoggedIn()
             } else {
                 // Sign in failed, check response for error code
                 finish()
@@ -79,22 +71,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == REQUEST_CAMERA) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                // close app
-                finish()
-            } else {
-                openNextActivity()
-            }
-        }
-    }
-
     private fun openNextActivity() {
-        var profInt = Intent(this, ProfileActivity::class.java)
+        val profInt = Intent(this, ProfileActivity::class.java)
         profInt.putExtra("UID", "gvd")
         startActivity(profInt)
+    }
+
+    private fun onLoggedIn() {
+        startActivity(intentFor<FaceScanActivity>())
     }
 }
