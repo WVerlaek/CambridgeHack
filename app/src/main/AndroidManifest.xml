@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.FaceScanActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activity.LoadingActivity">
             <intent-filter>

@@ -65,7 +65,7 @@ class FaceScanner(val container: ViewGroup) : AnkoLogger {
         timer = Timer().apply {
             scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
-                    doAnalyse(context)
+//                    doAnalyse(context)
                 }
             }, 500L, POLL_RATE)
         }

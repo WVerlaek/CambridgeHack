@@ -32,9 +32,9 @@ class ShowProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_profile)
 
         val profileId = intent.getStringExtra(PROFILE_ID)
-        val resp = Repository()
+        val repo = Repository()
 
-        resp.getProfile(profileId, object : ProfileListener {
+        repo.getProfile(profileId, object : ProfileListener {
             override fun retrieveDone(prof: Profile) {
                 loadingFrame.visibility = View.GONE
                 txtTitle.text = "TODO"

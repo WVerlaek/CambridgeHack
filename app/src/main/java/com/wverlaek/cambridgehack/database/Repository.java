@@ -14,7 +14,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.wverlaek.cambridgehack.util.Listener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -62,6 +65,37 @@ public class Repository {
     public void updateProfile(final Profile prof) {
         DatabaseReference profiles = mDatabase.child("profiles");
         profiles.child(prof.uid).setValue(prof);
+    }
+
+    public void getProfilesByPersonIds(final List<UUID> personIds, final Listener<List<Profile>> listener) {
+        mDatabase.child("profiles").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Profile> result = new ArrayList<>();
+                for (int i = 0; i < personIds.size(); i++) {
+                    result.add(null);
+                }
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Profile profile = child.getValue(Profile.class);
+                    if (profile != null) {
+                        for (int i = 0; i < personIds.size(); i++) {
+                            UUID uuid = personIds.get(i);
+                            if (uuid != null) {
+                                if (uuid.toString().equals(profile.personId)) {
+                                    result.set(i, profile);
+                                }
+                            }
+                        }
+                    }
+                }
+                listener.onComplete(result);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onError();
+            }
+        });
     }
 
     public void getProfileByPersonId(final UUID personId, final ProfileListener list) {

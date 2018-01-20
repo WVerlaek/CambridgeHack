@@ -14,6 +14,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.wverlaek.cambridgehack.ui.view.PictureView
+        android:id="@+id/snapshot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <com.wverlaek.cambridgehack.ui.view.FacesView
         android:id="@+id/faces_view"
         android:layout_width="match_parent"
@@ -27,11 +32,39 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_search_black_24dp"
-        android:tint="@color/white"/>
+        android:tint="@color/white"
+        app:useCompatPadding="true"
+        app:fabSize="normal"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/close_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/fab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:useCompatPadding="true"
+        app:fabSize="mini"
+        android:tint="@color/white"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_close_black_24dp"
+        android:visibility="invisible"
+        />
+
+    <FrameLayout android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white50"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

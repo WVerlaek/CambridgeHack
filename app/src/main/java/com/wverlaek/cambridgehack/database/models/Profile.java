@@ -24,4 +24,14 @@ public class Profile {
 //    }
 
     public Profile() {}
+
+//    public Profile(String firstName, String lastNamet, String facebookLink, String background) {
+//        this.name = name;
+//        this.facebookLink = facebookLink;
+//        this.background = background;
+//    }
+
+    public String getDisplayName() {
+        return firstName + " " + lastName;
+    }
 }
