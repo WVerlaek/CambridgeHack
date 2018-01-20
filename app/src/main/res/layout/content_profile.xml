@@ -20,6 +20,44 @@
             android:gravity="center"
             android:textSize="24dip"/>
 
+        <TextView android:id="@+id/link_signup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Your profile photo:"
+            android:gravity="center"
+            android:textSize="16dip"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:weightSum="2">
+
+            <ImageView android:id="@+id/profile_photo"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:adjustViewBounds="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_gravity="bottom"
+            android:padding="12dp"
+            android:text="Upload selfie"/>
+
         <!--<ImageView android:src="@drawable/logo"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="72dp"-->
