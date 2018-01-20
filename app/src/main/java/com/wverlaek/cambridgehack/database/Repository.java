@@ -38,7 +38,7 @@ public class Repository {
 
                         // [START_EXCLUDE]
                         if (prof == null) {
-                            Log.e(TAG, "Profile " + uid + " is unexpectedly null");
+//                            Log.e(TAG, "Profile " + uid + " is unexpectedly null");
                         } else {
                             prof.uid = uid;
                         }

@@ -9,27 +9,24 @@ import android.support.annotation.NonNull;
 public class Profile {
     public String uid = null;
 
-    public String getName() {
-        return name;
-    }
+    public String firstName;
+    public String lastName;
+    public String title;
+    public String organization;
+    public String linkedInName;
+    public String githubName;
+    public String facebookName;
 
-    public String getFacebookLink() {
-        return facebookLink;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public String name;
-    public String facebookLink;
-    public String background;
+    //TODO
+//    public Image getProfilePhoto() {
+//
+//    }
 
     public Profile() {}
 
-    public Profile(String name, String facebookLink, String background) {
-        this.name = name;
-        this.facebookLink = facebookLink;
-        this.background = background;
-    }
+//    public Profile(String firstName, String lastNamet, String facebookLink, String background) {
+//        this.name = name;
+//        this.facebookLink = facebookLink;
+//        this.background = background;
+//    }
 }

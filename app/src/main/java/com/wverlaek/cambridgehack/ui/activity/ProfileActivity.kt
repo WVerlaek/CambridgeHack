@@ -17,6 +17,8 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
+import com.wverlaek.cambridgehack.detection.FaceDetection
+import java.util.*
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -54,9 +56,17 @@ class ProfileActivity : AppCompatActivity() {
                     loadingFrame.visibility = View.GONE
 
                     btn_submit.setOnClickListener {
-                        val newProf = Profile(name_field.text.toString(), "no link",
-                                background_field.text.toString())
+                        val newProf = Profile();
+
                         newProf.uid = uid
+                        newProf.firstName = first_name_field.text.toString()
+                        newProf.lastName = last_name_field.text.toString()
+                        newProf.title = title_field.text.toString()
+                        newProf.organization = organization_field.text.toString()
+                        newProf.facebookName = facebook_field.text.toString()
+                        newProf.githubName = github_field.text.toString()
+                        newProf.linkedInName = linkedIn_field.text.toString()
+
                         repo.updateProfile(newProf)
                         toast("Created your profile")
                         startActivity(intentFor<FaceScanActivity>())
@@ -91,6 +101,14 @@ class ProfileActivity : AppCompatActivity() {
             val uri : Uri = data.getData()
             Log.d(TAG, "selected image: " + uri)
             val ref = storageRef.child("images/" + uid)
+
+            FaceDetection().uploadImage(UUID.fromString("f1cbfc9b-0840-4fa3-87eb-171f81cec429"),
+                    object : com.wverlaek.cambridgehack.util.Listener<Unit?> {
+                        override fun onComplete(result: Unit?) {}
+                        override fun onError() {}
+                    },
+                    getContentResolver().openInputStream(uri))
+
             ref.putFile(uri)
 
             toast("Your picture is stored ")

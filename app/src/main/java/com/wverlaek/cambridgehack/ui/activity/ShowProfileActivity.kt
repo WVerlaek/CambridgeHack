@@ -39,8 +39,8 @@ class ShowProfileActivity : AppCompatActivity() {
                 loadingFrame.visibility = View.GONE
                 txtTitle.text = "TODO"
                 txtOrg.text = "TODO"
-                txtName.text = prof.name
-                txtUrl.text = prof.facebookLink
+                txtName.text = prof.firstName + " " + prof.lastName
+                txtUrl.text = prof.title + " at " + prof.organization
                 // show profile
             }
 
