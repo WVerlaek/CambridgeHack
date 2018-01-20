@@ -33,27 +33,24 @@ public class Repository {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Get user value
                         Profile prof = dataSnapshot.getValue(Profile.class);
-                        prof.uid = uid;
 
                         Log.d(TAG, "onDataChange " + uid);
 
                         // [START_EXCLUDE]
                         if (prof == null) {
-                            // Profile is null, error out
                             Log.e(TAG, "Profile " + uid + " is unexpectedly null");
-//                            Toast.makeText(NewPostActivity.this,
-//                                    "Error: could not fetch user.",
-//                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            list.retrieveDone(prof);
+                            prof.uid = uid;
                         }
+                        list.retrieveDone(prof);
                         // [END_EXCLUDE]
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "getProfile:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
+                        Log.w(TAG, "getProfile:onCancelled", databaseError.toException());
+                        list.onError(databaseError);
                         // [END_EXCLUDE]
                     }
                 });

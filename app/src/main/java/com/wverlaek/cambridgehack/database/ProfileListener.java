@@ -1,5 +1,6 @@
 package com.wverlaek.cambridgehack.database;
 
+import com.google.firebase.database.DatabaseError;
 import com.wverlaek.cambridgehack.database.models.Profile;
 
 /**
@@ -8,4 +9,5 @@ import com.wverlaek.cambridgehack.database.models.Profile;
 
 public interface ProfileListener {
     void retrieveDone(Profile prof);
+    void onError(DatabaseError de);
 }
