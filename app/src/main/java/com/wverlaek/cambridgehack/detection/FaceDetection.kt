@@ -17,25 +17,25 @@ class FaceDetection {
 
     private val faceClient = FaceServiceRestClient(Constants.MS_API_LOCATION, Constants.MS_API_KEY)
 
-    fun detectFaces(picture: Picture, listener: Listener<List<Face>?>) {
+    fun detectFaces(picture: Picture, listener: Listener<List<Face>>) {
         doAsync {
             try {
                 val faces = faceClient.detect(ByteArrayInputStream(picture.jpegData), true, false, arrayOf())
 
                 uiThread { listener.onComplete(faces.asList()) }
             } catch (e: ClientException) {
-                uiThread { listener.onComplete(null) }
+                uiThread { listener.onError() }
             }
         }
     }
 
-    fun identifyFaces(faces: List<Face>, listener: Listener<List<IdentifyResult>?>) {
+    fun identifyFaces(faces: List<Face>, listener: Listener<List<IdentifyResult>>) {
         doAsync {
             try {
                 faceClient.identity("h_c", faces.map { it.faceId }.toTypedArray(), 10 /*TODO*/)
-                uiThread { listener.onComplete(null) }//todo
+                uiThread { listener.onComplete(emptyList()) }//todo
             } catch (e: ClientException) {
-                uiThread { listener.onComplete(null) }
+                uiThread { listener.onError() }
             }
         }
     }

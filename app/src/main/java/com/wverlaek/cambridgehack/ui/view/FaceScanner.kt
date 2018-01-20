@@ -94,7 +94,7 @@ class FaceScanner(val container: ViewGroup) : AnkoLogger {
         })
     }
 
-    private fun takePicture(listener: OnPictureListener) {
+    fun takePicture(listener: OnPictureListener) {
         if (!takingPicture) {
             takingPicture = true
             val picture = preview?.previewPicture

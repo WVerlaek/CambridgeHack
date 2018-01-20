@@ -3,6 +3,8 @@ package com.wverlaek.cambridgehack.util
 /**
  * Created by WVerl on 20-1-2018.
  */
-interface Listener<T> {
+@FunctionalInterface
+interface Listener<in T> {
     fun onComplete(result: T)
+    fun onError()
 }
