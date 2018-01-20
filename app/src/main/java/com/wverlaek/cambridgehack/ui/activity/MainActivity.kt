@@ -27,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
 
     private val providers = listOf(
-            AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()
-//            AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
-//            AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
+            AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+            AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build(),
+            AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
