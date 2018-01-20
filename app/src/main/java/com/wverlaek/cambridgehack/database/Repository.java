@@ -56,5 +56,8 @@ public class Repository {
                 });
     }
 
-
+    public void updateProfile(final Profile prof) {
+        DatabaseReference profiles = mDatabase.child("profiles");
+        profiles.child(prof.uid).setValue(prof);
+    }
 }

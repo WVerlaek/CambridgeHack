@@ -79,20 +79,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val resp = Repository()
-
-        resp.getProfile("rolf", object : ProfileListener {
-            override fun retrieveDone(prof: Profile) {
-                Log.d(TAG, "name " + prof.name + " link " + prof.facebookLink + " uid " + prof.uid)
-            }
-
-            override fun onError(de: DatabaseError?) {
-            }
-        })
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -107,6 +93,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openNextActivity() {
-        startActivity(intentFor<FaceScanActivity>())
+        var profInt = Intent(this, ProfileActivity::class.java)
+        profInt.putExtra("UID", "gvd")
+        startActivity(profInt)
     }
 }
