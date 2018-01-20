@@ -11,6 +11,7 @@ import org.jetbrains.anko.uiThread
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by WVerl on 20-1-2018.
@@ -45,7 +46,7 @@ class FaceDetection {
     fun createPerson(name: String, listener: Listener<UUID>) {
         doAsync {
             try {
-                val newPerson = faceClient.createPerson("h_c", name, null)
+                val newPerson = faceClient.createPerson("c_h", name, null)
                 uiThread { listener.onComplete(newPerson.personId) }
             } catch (e: ClientException) {
                 uiThread { listener.onError() }
@@ -56,8 +57,21 @@ class FaceDetection {
     fun uploadImage(uuid: UUID, listener: Listener<Unit?>, img: InputStream) {
         doAsync {
             try {
-                faceClient.addPersonFace("h_c", uuid, img, null, null)
+                faceClient.addPersonFace("c_h", uuid, img, null, null)
                 uiThread { listener.onComplete(null) }
+            } catch (e: ClientException) {
+                uiThread { listener.onError() }
+            }
+        }
+    }
+
+    fun getPersons(listener: Listener<Map<String, String>>) {
+        doAsync {
+            try {
+                val persons = faceClient.getPersons("c_h")
+                val map = HashMap<String, String>()
+                persons.forEach { person -> map.put(person.personId.toString(), person.name) }
+                uiThread { listener.onComplete(map) }
             } catch (e: ClientException) {
                 uiThread { listener.onError() }
             }
