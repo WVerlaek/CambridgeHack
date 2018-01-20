@@ -7,6 +7,7 @@ import com.wverlaek.cambridgehack.ui.view.Picture
 import com.wverlaek.cambridgehack.util.Constants
 import com.wverlaek.cambridgehack.util.Listener
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.ByteArrayInputStream
 
 /**
@@ -20,9 +21,10 @@ class FaceDetection {
         doAsync {
             try {
                 val faces = faceClient.detect(ByteArrayInputStream(picture.jpegData), true, false, arrayOf())
-                listener.onComplete(faces.asList())
+
+                uiThread { listener.onComplete(faces.asList()) }
             } catch (e: ClientException) {
-                listener.onComplete(null)
+                uiThread { listener.onComplete(null) }
             }
         }
     }
@@ -31,9 +33,9 @@ class FaceDetection {
         doAsync {
             try {
                 faceClient.identity("h_c", faces.map { it.faceId }.toTypedArray(), 10 /*TODO*/)
-                listener.onComplete(null)//todo
+                uiThread { listener.onComplete(null) }//todo
             } catch (e: ClientException) {
-                listener.onComplete(null)
+                uiThread { listener.onComplete(null) }
             }
         }
     }
