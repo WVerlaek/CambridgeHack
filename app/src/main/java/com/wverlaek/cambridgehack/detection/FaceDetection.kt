@@ -9,6 +9,8 @@ import com.wverlaek.cambridgehack.util.Listener
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.ByteArrayInputStream
+import java.io.InputStream
+import java.util.*
 
 /**
  * Created by WVerl on 20-1-2018.
@@ -40,5 +42,25 @@ class FaceDetection {
         }
     }
 
+    fun createPerson(name: String, listener: Listener<UUID>) {
+        doAsync {
+            try {
+                val newPerson = faceClient.createPerson("h_c", name, null)
+                uiThread { listener.onComplete(newPerson.personId) }
+            } catch (e: ClientException) {
+                uiThread { listener.onError() }
+            }
+        }
+    }
 
+    fun uploadImage(uuid: UUID, listener: Listener<Unit?>, img: InputStream) {
+        doAsync {
+            try {
+                faceClient.addPersonFace("h_c", uuid, img, null, null)
+                uiThread { listener.onComplete(null) }
+            } catch (e: ClientException) {
+                uiThread { listener.onError() }
+            }
+        }
+    }
 }
