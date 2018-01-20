@@ -21,9 +21,18 @@ public class Profile {
         return background;
     }
 
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
+    }
+
     public String name;
     public String facebookLink;
     public String background;
+    private String personId;
 
     public Profile() {}
 
