@@ -4,7 +4,7 @@ import click
 
 key = 'a5a4db57b7ab45f8ad477e55174106c3'
 
-base_url = 'westcentralus.api.cognitive.microsoft.com'
+    base_url = 'westcentralus.api.cognitive.microsoft.com'
 
 headers = {
     # Request headers.
@@ -75,6 +75,10 @@ def create_person(group_id, name):
 @click.option('--person_id', prompt='Person name', help='Person id')
 @click.option('--file_name', prompt='JPG file name', help='File name')
 def add_face(group_id, person_id, file_name):
+    add_face_inner(group_id, person_id, file_name)
+
+
+def add_face_inner(group_id, person_id, file_name):
     params = urllib.parse.urlencode({
     })
 
@@ -225,14 +229,14 @@ def delete_person(group_id, person_id):
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
-@cli.command('Associate all pictures in directory with a person')
+@cli.command(help='Associate all pictures in directory with a person')
 @click.option('--group_id', default='c_h', help='Unique group id')
-@click.option('--person_id', prompt='Person name', help='Unique person id')
-@click.option('--dir', prompt='JPG file directory', help='Directory')
-def add_face_dir(group_id, person_id, dir):
-    filelist = [f"{dir}/{file}" for file in os.listdir(dir) if file.endswith('.jpg')]
+@click.option('--person_id', prompt='Person id', help='Unique person id')
+@click.option('--path', prompt='JPG file directory', help='Directory')
+def add_face_dir(group_id, person_id, path):
+    filelist = [f"{path}/{file}" for file in os.listdir(path) if file.endswith('.jpg')]
     for file in filelist:
-        add_face(group_id, person_id, file)
+        add_face_inner(group_id, person_id, file)
 
 
 
