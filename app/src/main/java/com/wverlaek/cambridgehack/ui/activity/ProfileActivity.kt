@@ -52,13 +52,10 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         EasyImage.configuration(this)
-//                .setImagesFolderName("EasyImage sample")
-//                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
-//                .setCopyPickedImagesToPublicGalleryAppFolder(true)
                 .setAllowMultiplePickInGallery(true);
 
         Log.d(TAG, "Is in ProfileActivity")
-
+1
         if (intent == null || !intent.hasExtra(UID_TAG)) {
             Log.e(TAG, "Not a valid intent: " + intent)
             return
@@ -80,6 +77,8 @@ class ProfileActivity : AppCompatActivity() {
                         if (mArrayFiles.size < 1) {
                             toast("Your profile needs at least one picture")
                         } else {
+                            toast("Uploading profile")
+                            loadingFrame.visibility = View.VISIBLE
                             FaceDetection().createPerson(uid,
                                     object : Listener<UUID> {
                                         override fun onComplete(result: UUID) {
@@ -98,13 +97,12 @@ class ProfileActivity : AppCompatActivity() {
 
                                             repo.updateProfile(newProf)
 
-                                            toast("Created your profile")
-
                                             val faceDetection = FaceDetection()
                                             uploadImages(faceDetection, result, mArrayFiles, object : Listener<Unit> {
                                                 override fun onComplete(result: Unit) {
                                                     faceDetection.trainPersonGroup(Constants.MS_GROUP_ID,
                                                             null)
+                                                    toast("Created your profile")
                                                     startActivity(intentFor<SchijndelActivity>())
                                                     finish()
                                                 }
