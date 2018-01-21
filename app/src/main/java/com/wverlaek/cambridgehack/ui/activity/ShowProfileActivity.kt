@@ -10,7 +10,6 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
 import com.wverlaek.cambridgehack.R
 import com.wverlaek.cambridgehack.database.ImageRepository

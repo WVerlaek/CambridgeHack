@@ -14,7 +14,6 @@ import com.wverlaek.cambridgehack.database.models.Profile
 import kotlinx.android.synthetic.main.content_profile.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
-import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
 import com.wverlaek.cambridgehack.util.Listener
@@ -26,15 +25,13 @@ import java.io.File
 import java.io.FileInputStream
 import kotlin.collections.ArrayList
 
-
 class ProfileActivity : AppCompatActivity() {
     val TAG = "PROFILE"
     val PICK_IMAGE = 1
     var repo : Repository = Repository()
     private lateinit var uid: String
     private var storage = FirebaseStorage.getInstance()
-    private var storageRef = storage.getReference()
-    private var mArrayUri = ArrayList<Uri>()
+    private var storageRef = storage.reference
     private var mArrayFiles = ArrayList<File>()
 
     companion object {
@@ -50,10 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         EasyImage.configuration(this)
-//                .setImagesFolderName("EasyImage sample")
-//                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
-//                .setCopyPickedImagesToPublicGalleryAppFolder(true)
-                .setAllowMultiplePickInGallery(true);
+                .setAllowMultiplePickInGallery(true)
 
         if (intent == null || !intent.hasExtra(UID_TAG)) return
         uid = intent.getStringExtra(UID_TAG)
@@ -67,21 +61,21 @@ class ProfileActivity : AppCompatActivity() {
                     loadingFrame.visibility = View.GONE
 
                     btn_submit.setOnClickListener {
-                        FaceDetection().createPerson(last_name_field.text.toString(),
-                                object:Listener<UUID> {
+                        FaceDetection().createPerson(uid,
+                                object : Listener<UUID> {
                                     override fun onComplete(result: UUID) {
-                                        val newProf = Profile();
+                                        val newProf = Profile()
+                                        val user = FirebaseAuth.getInstance().currentUser
 
                                         newProf.uid = uid
-                                        newProf.firstName = first_name_field.text.toString()
-                                        newProf.lastName = last_name_field.text.toString()
                                         newProf.title = title_field.text.toString()
                                         newProf.organization = organization_field.text.toString()
                                         newProf.facebookName = facebook_field.text.toString()
                                         newProf.githubName = github_field.text.toString()
                                         newProf.linkedInName = linkedIn_field.text.toString()
                                         newProf.personId = result.toString()
-                                        newProf.email = FirebaseAuth.getInstance().currentUser?.email ?: ""
+                                        newProf.email = user?.email ?: ""
+                                        newProf.displayName = user?.displayName ?: ""
 
                                         repo.updateProfile(newProf)
 
@@ -104,11 +98,10 @@ class ProfileActivity : AppCompatActivity() {
                                         toast("Failed to create profile")
                                     }
                                 })
-
                     }
 
                     btn_photo.setOnClickListener {
-                        EasyImage.openChooserWithGallery(this@ProfileActivity, "Choose your pictures", PICK_IMAGE);
+                        EasyImage.openChooserWithGallery(this@ProfileActivity, "Choose your pictures", PICK_IMAGE)
                     }
                 }
             }
@@ -126,9 +119,9 @@ class ProfileActivity : AppCompatActivity() {
             val image = images[curIndex]
             val inputStream = FileInputStream(image)
             faceDetection.uploadImage(personId,
-                    object:Listener<Unit?>{
+                    object : Listener<Unit?> {
                         override fun onComplete(result: Unit?) {
-                            uploadImages(faceDetection, personId, images, listener,curIndex + 1)
+                            uploadImages(faceDetection, personId, images, listener, curIndex + 1)
                         }
 
                         override fun onError() {
