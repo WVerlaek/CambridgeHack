@@ -21,6 +21,7 @@ import com.wverlaek.cambridgehack.util.Listener
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.util.*
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_profile.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import java.io.File
 import java.io.FileInputStream
@@ -63,7 +64,8 @@ class ProfileActivity : AppCompatActivity() {
         }
         uid = intent.getStringExtra(UID_TAG)
 
-        title = "Create your profile"
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Create your profile"
 
         repo.getProfile(uid, object : ProfileListener {
             override fun retrieveDone(prof: Profile?) {
