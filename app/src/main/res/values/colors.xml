@@ -10,15 +10,14 @@
     <color name="black23">#3B000000</color>
     <color name="black14">#24000000</color>
 
-    <color name="color_temp_cold">@color/colorPrimaryDark</color>
-    <color name="color_temp_neutral">@color/colorPrimary</color>
-    <color name="color_temp_warm">@color/colorAccent</color>
-
     <color name="transparent">#00000000</color>
     <color name="divider">#1F000000</color>
 
 
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#37474f</color>
+    <color name="colorPrimaryLight">#62727b</color>
+    <color name="colorPrimaryDark">#102027</color>
+    <color name="colorAccent">#d50000</color>
+    <color name="colorPrimaryText">@color/white</color>
+    <color name="colorAccentText">@color/white</color>
 </resources>

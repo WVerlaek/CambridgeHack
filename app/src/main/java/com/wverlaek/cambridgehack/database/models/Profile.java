@@ -17,6 +17,7 @@ public class Profile {
     public String githubName;
     public String facebookName;
     public String personId;
+    public String email;
 
     //TODO
 //    public Image getProfilePhoto() {

@@ -22,8 +22,7 @@ import org.jetbrains.anko.custom.onUiThread
 import java.util.*
 import android.support.annotation.NonNull
 import com.firebase.ui.auth.AuthUI
-
-
+import com.google.firebase.auth.FirebaseAuth
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -75,6 +74,7 @@ class ProfileActivity : AppCompatActivity() {
                                         newProf.githubName = github_field.text.toString()
                                         newProf.linkedInName = linkedIn_field.text.toString()
                                         newProf.personId = result.toString()
+                                        newProf.email = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
                                         repo.updateProfile(newProf)
 
@@ -139,7 +139,7 @@ class ProfileActivity : AppCompatActivity() {
                 toast("Your picture is stored ")
 
                 mArrayUri.add(uri)
-            } else if (data.getClipData() != null) {
+            } else if (data.clipData != null) {
                 val mClipData = data.clipData
 
                 for (i in 0 until mClipData.itemCount) {

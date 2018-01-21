@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun onLoggedIn(user: FirebaseUser) {
-        startActivity(ProfileActivity.createIntent(this, user.uid))
+//        startActivity(intentFor<SchijndelActivity>())
+        startActivity(ShowProfileActivity.createIntent(this, "At5HCutyRXTGOsL815RkWItqhty2"))
     }
 }

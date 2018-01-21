@@ -39,7 +39,7 @@ class FaceScanActivity : AppCompatActivity(), AnkoLogger {
                 override fun onPicture(picture: Picture?) {
                     picture?.let {
 
-
+                        snapshot.setPicture(picture)
                         detectFaces(it, object : Listener<Map<Face, Profile?>> {
                             override fun onComplete(result: Map<Face, Profile?>) {
                                 if (result.isEmpty()) {
