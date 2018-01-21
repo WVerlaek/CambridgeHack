@@ -50,9 +50,9 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         EasyImage.configuration(this)
-                .setImagesFolderName("EasyImage sample")
-                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
-                .setCopyPickedImagesToPublicGalleryAppFolder(true)
+//                .setImagesFolderName("EasyImage sample")
+//                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
+//                .setCopyPickedImagesToPublicGalleryAppFolder(true)
                 .setAllowMultiplePickInGallery(true);
 
         if (intent == null || !intent.hasExtra(UID_TAG)) return
@@ -88,24 +88,16 @@ class ProfileActivity : AppCompatActivity() {
                                         toast("Created your profile")
 
                                         val faceDetection = FaceDetection()
-                                        for (image in mArrayFiles) {
-                                            val inputStream = FileInputStream(image)
-                                            faceDetection.uploadImage(result,
-                                                    object:Listener<Unit?>{
-                                                        override fun onComplete(result: Unit?) {
+                                        uploadImages(faceDetection, result, mArrayFiles, object : Listener<Unit> {
+                                            override fun onComplete(result: Unit) {
+                                                startActivity(intentFor<SchijndelActivity>())
+                                                finish()
+                                            }
 
-                                                        }
+                                            override fun onError() {
+                                            }
 
-                                                        override fun onError() {
-                                                            toast("error")
-                                                        }
-
-                                                    },
-                                                    inputStream)
-                                        }
-
-                                        startActivity(intentFor<SchijndelActivity>())
-                                        finish()
+                                        })
                                     }
 
                                     override fun onError() {
@@ -127,6 +119,27 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
+    private fun uploadImages(faceDetection: FaceDetection, personId: UUID, images: List<File>, listener: Listener<Unit>, curIndex: Int = 0) {
+        if (curIndex >= images.size) {
+            listener.onComplete(Unit)
+        } else {
+            val image = images[curIndex]
+            val inputStream = FileInputStream(image)
+            faceDetection.uploadImage(personId,
+                    object:Listener<Unit?>{
+                        override fun onComplete(result: Unit?) {
+                            uploadImages(faceDetection, personId, images, listener,curIndex + 1)
+                        }
+
+                        override fun onError() {
+                            uploadImages(faceDetection, personId, images, listener, curIndex + 1)
+                        }
+
+                    },
+                    inputStream)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -140,6 +153,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onImagesPicked(imageFiles: List<File>, source: EasyImage.ImageSource, type: Int) {
+                Log.d(TAG, "images " + imageFiles.size)
                 mArrayFiles = ArrayList(imageFiles)
                 val firstUri = android.net.Uri.parse(mArrayFiles.first().toURI().toString())
                 val ref = storageRef.child("images/" + uid)

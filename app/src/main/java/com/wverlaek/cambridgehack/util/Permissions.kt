@@ -14,10 +14,11 @@ object Permissions {
 
     fun hasCameraPermission(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED
     }
 
     fun requestCameraPermission(activity: Activity, requestCode: Int) {
-        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), requestCode)
+        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), requestCode)
     }
 }

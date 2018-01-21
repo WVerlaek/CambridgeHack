@@ -10,6 +10,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.wverlaek.cambridgehack.R
 import org.jetbrains.anko.intentFor
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+
+
 
 class MainActivity : AppCompatActivity() {
 
