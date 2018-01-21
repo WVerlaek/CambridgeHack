@@ -188,6 +188,80 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/txtTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/email">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:layout_marginTop="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/github_user_item">
+                    <ImageView android:id="@+id/github_profile_icon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="24dp"/>
+
+                    <TextView android:id="@+id/github_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/github_profile_icon"
+                        app:layout_constraintStart_toEndOf="@id/github_profile_icon"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        tools:text="github_name"
+                        android:textColor="@color/black87"
+                        android:textSize="14sp"/>
+
+                    <TextView android:id="@+id/github_nr_repos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@id/github_profile_icon"
+                        app:layout_constraintStart_toEndOf="@id/github_profile_icon"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="4dp"
+                        tools:text="3 public repositories"
+                        android:textColor="@color/black54"
+                        android:textSize="14sp"/>
+
+                    <TextView android:id="@+id/github_featured"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Featured repositories"
+                        android:textColor="@color/black87"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/github_profile_icon"
+                        android:visibility="invisible"
+                        />
+
+                    <LinearLayout android:id="@+id/github_repos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/github_featured"
+                        app:layout_constraintStart_toEndOf="@id/github_profile_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </android.support.constraint.ConstraintLayout>
+            </ScrollView>
+
+
+
+
             <!--<LinearLayout android:id="@+id/linkedin_button"-->
                 <!--style="@style/Base.Widget.AppCompat.Button"-->
                 <!--android:layout_width="@dimen/social_button_width"-->

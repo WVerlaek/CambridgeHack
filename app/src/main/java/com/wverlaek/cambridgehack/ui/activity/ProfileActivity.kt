@@ -55,8 +55,15 @@ class ProfileActivity : AppCompatActivity() {
 //                .setCopyPickedImagesToPublicGalleryAppFolder(true)
                 .setAllowMultiplePickInGallery(true);
 
-        if (intent == null || !intent.hasExtra(UID_TAG)) return
+        Log.d(TAG, "Is in ProfileActivity")
+
+        if (intent == null || !intent.hasExtra(UID_TAG)) {
+            Log.e(TAG, "Not a valid intent: " + intent)
+            return
+        }
         uid = intent.getStringExtra(UID_TAG)
+
+        title = "Create your profile"
 
         repo.getProfile(uid, object : ProfileListener {
             override fun retrieveDone(prof: Profile?) {

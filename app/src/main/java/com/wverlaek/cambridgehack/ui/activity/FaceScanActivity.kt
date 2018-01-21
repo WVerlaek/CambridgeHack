@@ -30,7 +30,7 @@ class FaceScanActivity : AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_face_scan)
         faceScanner = FaceScanner(camera)
-        fab.setOnClickListener {
+        fullscreen_click.setOnClickListener {
             setFabEnabled(false)
             loading_overlay.visibility = View.VISIBLE
 
@@ -49,7 +49,6 @@ class FaceScanActivity : AppCompatActivity(), AnkoLogger {
                                     faces_view.setFaces(result)
                                     snapshot.setPicture(it)
 
-                                    setFabEnabled(true)
                                     close_app.show()
                                 }
                             }
@@ -75,13 +74,14 @@ class FaceScanActivity : AppCompatActivity(), AnkoLogger {
             close_app.hide()
             faces_view.setFaces(emptyMap())
             snapshot.setPicture(null)
+            setFabEnabled(true)
         }
 //        camera_view.addCallback(callback)
     }
 
     private fun setFabEnabled(enabled: Boolean) {
-        fab.isEnabled = enabled
-        fab.setImageResource(if (enabled) R.drawable.ic_search_black_24dp else R.drawable.ic_hourglass_full_black_24dp)
+        fullscreen_click.isEnabled = enabled
+        fullscreen_click.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
     private fun detectFaces(picture: Picture, listener: Listener<Map<Face, Profile?>>) {

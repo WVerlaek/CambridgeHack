@@ -28,7 +28,11 @@ class PictureView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
+
         picture?.let {
+            canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
             canvas.drawBitmap(it.bitmap, 0f, 0f, paint)
         }
     }

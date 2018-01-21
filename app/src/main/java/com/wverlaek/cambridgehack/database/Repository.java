@@ -42,22 +42,17 @@ public class Repository {
 
                         Log.d(TAG, "onDataChange " + uid);
 
-                        // [START_EXCLUDE]
                         if (prof == null) {
-//                            Log.e(TAG, "Profile " + uid + " is unexpectedly null");
                         } else {
                             prof.uid = uid;
                         }
                         list.retrieveDone(prof);
-                        // [END_EXCLUDE]
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        // [START_EXCLUDE]
                         Log.w(TAG, "getProfile:onCancelled", databaseError.toException());
                         list.onError(databaseError);
-                        // [END_EXCLUDE]
                     }
                 });
     }
