@@ -28,7 +28,7 @@ import kotlin.collections.ArrayList
 class ProfileActivity : AppCompatActivity() {
     val TAG = "PROFILE"
     val PICK_IMAGE = 1
-    var repo : Repository = Repository()
+    var repo: Repository = Repository()
     private lateinit var uid: String
     private var storage = FirebaseStorage.getInstance()
     private var storageRef = storage.reference
@@ -61,43 +61,48 @@ class ProfileActivity : AppCompatActivity() {
                     loadingFrame.visibility = View.GONE
 
                     btn_submit.setOnClickListener {
-                        FaceDetection().createPerson(uid,
-                                object : Listener<UUID> {
-                                    override fun onComplete(result: UUID) {
-                                        val newProf = Profile()
-                                        val user = FirebaseAuth.getInstance().currentUser
+                        if (mArrayFiles.size < 1) {
+                            toast("Your profile needs at least one picture")
+                        } else {
+                            FaceDetection().createPerson(last_name_field.text.toString(),
+                                    object : Listener<UUID> {
+                                        override fun onComplete(result: UUID) {
+                                            val newProf = Profile()
 
-                                        newProf.uid = uid
-                                        newProf.title = title_field.text.toString()
-                                        newProf.organization = organization_field.text.toString()
-                                        newProf.facebookName = facebook_field.text.toString()
-                                        newProf.githubName = github_field.text.toString()
-                                        newProf.linkedInName = linkedIn_field.text.toString()
-                                        newProf.personId = result.toString()
-                                        newProf.email = user?.email ?: ""
-                                        newProf.displayName = user?.displayName ?: ""
+                                            val user = FirebaseAuth.getInstance().currentUser
 
-                                        repo.updateProfile(newProf)
+                                            newProf.uid = uid
+                                            newProf.title = title_field.text.toString()
+                                            newProf.organization = organization_field.text.toString()
+                                            newProf.facebookName = facebook_field.text.toString()
+                                            newProf.githubName = github_field.text.toString()
+                                            newProf.linkedInName = linkedIn_field.text.toString()
+                                            newProf.personId = result.toString()
+                                            newProf.email = user?.email ?: ""
+                                            newProf.displayName = user?.displayName ?: ""
 
-                                        toast("Created your profile")
+                                            repo.updateProfile(newProf)
 
-                                        val faceDetection = FaceDetection()
-                                        uploadImages(faceDetection, result, mArrayFiles, object : Listener<Unit> {
-                                            override fun onComplete(result: Unit) {
-                                                startActivity(intentFor<SchijndelActivity>())
-                                                finish()
-                                            }
+                                            toast("Created your profile")
 
-                                            override fun onError() {
-                                            }
+                                            val faceDetection = FaceDetection()
+                                            uploadImages(faceDetection, result, mArrayFiles, object : Listener<Unit> {
+                                                override fun onComplete(result: Unit) {
+                                                    startActivity(intentFor<SchijndelActivity>())
+                                                    finish()
+                                                }
 
-                                        })
-                                    }
+                                                override fun onError() {
+                                                }
 
-                                    override fun onError() {
-                                        toast("Failed to create profile")
-                                    }
-                                })
+                                            })
+                                        }
+
+                                        override fun onError() {
+                                            toast("Failed to create profile")
+                                        }
+                                    })
+                        }
                     }
 
                     btn_photo.setOnClickListener {
@@ -140,27 +145,27 @@ class ProfileActivity : AppCompatActivity() {
 
         EasyImage.handleActivityResult(requestCode, resultCode, data, this,
                 object : DefaultCallback() {
-            override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
-                //Some error handling
-                e!!.printStackTrace()
-            }
+                    override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
+                        //Some error handling
+                        e!!.printStackTrace()
+                    }
 
-            override fun onImagesPicked(imageFiles: List<File>, source: EasyImage.ImageSource, type: Int) {
-                Log.d(TAG, "images " + imageFiles.size)
-                mArrayFiles = ArrayList(imageFiles)
-                val firstUri = android.net.Uri.parse(mArrayFiles.first().toURI().toString())
-                val ref = storageRef.child("images/" + uid)
-                ref.putFile(firstUri)
-                profile_photo.setImageURI(firstUri)
-            }
+                    override fun onImagesPicked(imageFiles: List<File>, source: EasyImage.ImageSource, type: Int) {
+                        Log.d(TAG, "images " + imageFiles.size)
+                        mArrayFiles = ArrayList(imageFiles)
+                        val firstUri = android.net.Uri.parse(mArrayFiles.first().toURI().toString())
+                        val ref = storageRef.child("images/" + uid)
+                        ref.putFile(firstUri)
+                        profile_photo.setImageURI(firstUri)
+                    }
 
-            override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
-                //Cancel handling, you might wanna remove taken photo if it was canceled
-                if (source == EasyImage.ImageSource.CAMERA) {
-                    val photoFile = EasyImage.lastlyTakenButCanceledPhoto(this@ProfileActivity)
-                    photoFile?.delete()
-                }
-            }
-        })
+                    override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
+                        //Cancel handling, you might wanna remove taken photo if it was canceled
+                        if (source == EasyImage.ImageSource.CAMERA) {
+                            val photoFile = EasyImage.lastlyTakenButCanceledPhoto(this@ProfileActivity)
+                            photoFile?.delete()
+                        }
+                    }
+                })
     }
 }
