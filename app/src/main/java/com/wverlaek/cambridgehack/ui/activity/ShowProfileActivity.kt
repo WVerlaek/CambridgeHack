@@ -63,6 +63,16 @@ class ShowProfileActivity : AppCompatActivity() {
                 email.text = prof.email
                 // show profile
 
+                if (!prof.facebookName.isEmpty()) {
+                    fb_button.visibility = View.VISIBLE
+                }
+                if (!prof.linkedInName.isEmpty()) {
+                    linkedin_button.visibility = View.VISIBLE
+                }
+                if (!prof.githubName.isEmpty()) {
+                    github_button.visibility = View.VISIBLE
+                }
+
                 fb_button.setOnClickListener {
 //                    try {
 //                        openUrl("fb://profile/${prof.facebookName}")

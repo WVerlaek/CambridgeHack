@@ -159,9 +159,9 @@ class ProfileActivity : AppCompatActivity() {
 
         EasyImage.handleActivityResult(requestCode, resultCode, data, this,
                 object : DefaultCallback() {
-                    override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
+                    override fun onImagePickerError(e: Exception, source: EasyImage.ImageSource?, type: Int) {
                         //Some error handling
-                        e!!.printStackTrace()
+                        e.printStackTrace()
                     }
 
                     override fun onImagesPicked(imageFiles: List<File>, source: EasyImage.ImageSource, type: Int) {
