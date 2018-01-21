@@ -20,9 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//    dexOptions {
-//        jumboMode true
-//    }
+    dexOptions {
+        jumboMode true
+    }
 }
 
 dependencies {
