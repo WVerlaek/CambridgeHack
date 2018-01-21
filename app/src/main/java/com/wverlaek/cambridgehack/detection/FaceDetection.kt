@@ -13,11 +13,7 @@ import org.jetbrains.anko.uiThread
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.util.*
-import kotlin.collections.HashMap
 
-/**
- * Created by WVerl on 20-1-2018.
- */
 class FaceDetection : AnkoLogger {
 
     private val faceClient = FaceServiceRestClient(Constants.MS_API_LOCATION, Constants.MS_API_KEY)
@@ -90,4 +86,14 @@ class FaceDetection : AnkoLogger {
         }
     }
 
+    fun trainPersonGroup(groupId: String, listener: Listener<Unit?>?) {
+        doAsync {
+            try {
+                faceClient.trainPersonGroup(groupId)
+                uiThread { listener?.onComplete(null) }
+            } catch (e: ClientException) {
+              uiThread { listener?.onError() }
+            }
+        }
+    }
 }

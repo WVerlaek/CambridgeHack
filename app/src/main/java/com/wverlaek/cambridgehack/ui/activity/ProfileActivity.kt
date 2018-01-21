@@ -21,6 +21,7 @@ import com.wverlaek.cambridgehack.util.Listener
 import pl.aprilapps.easyphotopicker.EasyImage
 import java.util.*
 import com.google.firebase.auth.FirebaseAuth
+import com.wverlaek.cambridgehack.util.Constants
 import kotlinx.android.synthetic.main.activity_profile.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import java.io.File
@@ -102,6 +103,8 @@ class ProfileActivity : AppCompatActivity() {
                                             val faceDetection = FaceDetection()
                                             uploadImages(faceDetection, result, mArrayFiles, object : Listener<Unit> {
                                                 override fun onComplete(result: Unit) {
+                                                    faceDetection.trainPersonGroup(Constants.MS_GROUP_ID,
+                                                            null)
                                                     startActivity(intentFor<SchijndelActivity>())
                                                     finish()
                                                 }
