@@ -64,7 +64,7 @@ class ProfileActivity : AppCompatActivity() {
                         if (mArrayFiles.size < 1) {
                             toast("Your profile needs at least one picture")
                         } else {
-                            FaceDetection().createPerson(last_name_field.text.toString(),
+                            FaceDetection().createPerson(uid,
                                     object : Listener<UUID> {
                                         override fun onComplete(result: UUID) {
                                             val newProf = Profile()
