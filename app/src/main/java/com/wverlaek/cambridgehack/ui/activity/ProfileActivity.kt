@@ -77,21 +77,21 @@ class ProfileActivity : AppCompatActivity() {
                         if (mArrayFiles.size < 1) {
                             toast("Your profile needs at least one picture")
                         } else {
-                            FaceDetection().createPerson(last_name_field.text.toString(),
+                            FaceDetection().createPerson(uid,
                                     object : Listener<UUID> {
                                         override fun onComplete(result: UUID) {
-                                            val newProf = Profile();
+                                            val newProf = Profile()
+                                            val user = FirebaseAuth.getInstance().currentUser
 
                                             newProf.uid = uid
-                                            newProf.firstName = first_name_field.text.toString()
-                                            newProf.lastName = last_name_field.text.toString()
                                             newProf.title = title_field.text.toString()
                                             newProf.organization = organization_field.text.toString()
                                             newProf.facebookName = facebook_field.text.toString()
                                             newProf.githubName = github_field.text.toString()
                                             newProf.linkedInName = linkedIn_field.text.toString()
                                             newProf.personId = result.toString()
-                                            newProf.email = FirebaseAuth.getInstance().currentUser?.email ?: ""
+                                            newProf.email = user?.email ?: ""
+                                            newProf.displayName = user?.displayName ?: ""
 
                                             repo.updateProfile(newProf)
 
@@ -150,7 +150,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         Log.d(TAG, "onActivityResult")
