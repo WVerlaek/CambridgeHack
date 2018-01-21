@@ -18,6 +18,7 @@ import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
 import com.wverlaek.cambridgehack.util.Listener
+import org.jetbrains.anko.custom.onUiThread
 import java.util.*
 import android.support.annotation.NonNull
 import com.firebase.ui.auth.AuthUI
@@ -78,6 +79,24 @@ class ProfileActivity : AppCompatActivity() {
                                         repo.updateProfile(newProf)
 
                                         toast("Created your profile")
+
+                                        val faceDetection = FaceDetection()
+                                        for (uri in mArrayUri) {
+                                            val inputStream = getContentResolver().openInputStream(uri)
+                                            faceDetection.uploadImage(result,
+                                                    object:Listener<Unit?>{
+                                                        override fun onComplete(result: Unit?) {
+
+                                                        }
+
+                                                        override fun onError() {
+                                                            toast("error")
+                                                        }
+
+                                                    },
+                                                    inputStream)
+                                        }
+
                                         startActivity(intentFor<SchijndelActivity>())
                                         finish()
                                     }
