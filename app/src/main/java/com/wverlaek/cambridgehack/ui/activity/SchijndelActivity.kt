@@ -28,19 +28,23 @@ class SchijndelActivity : AppCompatActivity() {
             val user = it
             ImageRepository().getProfileIconUri(user.uid, object : Listener<Uri> {
                 override fun onComplete(result: Uri) {
-                    Glide.with(this@SchijndelActivity)
-                            .load(result)
-                            .apply(RequestOptions.circleCropTransform())
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(profile_icon)
+                    if (!isFinishing) {
+                        Glide.with(this@SchijndelActivity)
+                                .load(result)
+                                .apply(RequestOptions.circleCropTransform())
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(profile_icon)
+                    }
                 }
 
                 override fun onError() {
-                    Glide.with(this@SchijndelActivity)
-                            .load(R.mipmap.ic_launcher_round)
-                            .apply(RequestOptions.circleCropTransform())
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(profile_icon)
+                    if (!isFinishing) {
+                        Glide.with(this@SchijndelActivity)
+                                .load(R.mipmap.ic_launcher_round)
+                                .apply(RequestOptions.circleCropTransform())
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(profile_icon)
+                    }
                 }
             })
 

@@ -15,6 +15,9 @@ import kotlinx.android.synthetic.main.content_profile.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import android.net.Uri
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
 import com.wverlaek.cambridgehack.util.Listener
@@ -23,6 +26,7 @@ import java.util.*
 import com.google.firebase.auth.FirebaseAuth
 import com.wverlaek.cambridgehack.util.Constants
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.activity_show_profile.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
 import java.io.File
 import java.io.FileInputStream
@@ -64,6 +68,8 @@ class ProfileActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Create your profile"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_person_add_white_24dp)
 
         repo.getProfile(uid, object : ProfileListener {
             override fun retrieveDone(prof: Profile?) {
@@ -71,14 +77,14 @@ class ProfileActivity : AppCompatActivity() {
                     startActivity(intentFor<SchijndelActivity>())
                     finish()
                 } else {
-                    loadingFrame.visibility = View.GONE
+                    loadingFrameProfile.visibility = View.GONE
 
                     btn_submit.setOnClickListener {
                         if (mArrayFiles.size < 1) {
                             toast("Your profile needs at least one picture")
                         } else {
                             toast("Uploading profile")
-                            loadingFrame.visibility = View.VISIBLE
+                            loadingFrameProfile.visibility = View.VISIBLE
                             FaceDetection().createPerson(uid,
                                     object : Listener<UUID> {
                                         override fun onComplete(result: UUID) {
@@ -171,7 +177,14 @@ class ProfileActivity : AppCompatActivity() {
                         val firstUri = android.net.Uri.parse(mArrayFiles.first().toURI().toString())
                         val ref = storageRef.child("images/" + uid)
                         ref.putFile(firstUri)
-                        profile_photo.setImageURI(firstUri)
+                        if (!isFinishing) {
+                            Glide.with(this@ProfileActivity)
+                                    .load(firstUri)
+                                    .apply(RequestOptions.circleCropTransform())
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(profile_photo)
+                        }
+//                        profile_photo.setImageURI(firstUri)
                     }
 
                     override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {

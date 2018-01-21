@@ -96,16 +96,18 @@ class ShowProfileActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<User>?, response: Response<User>) {
                             if (response.isSuccessful) {
                                 response.body()?.apply {
-                                    github_name.text = login
-                                    Glide.with(this@ShowProfileActivity)
-                                            .load(Uri.parse(avatar_url))
-                                            .apply(RequestOptions.circleCropTransform())
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(github_profile_icon)
-                                    github_nr_repos.text = "$public_repos public repositories"
+                                    if (!isFinishing) {
+                                        github_name.text = login
+                                        Glide.with(this@ShowProfileActivity)
+                                                .load(Uri.parse(avatar_url))
+                                                .apply(RequestOptions.circleCropTransform())
+                                                .transition(DrawableTransitionOptions.withCrossFade())
+                                                .into(github_profile_icon)
+                                        github_nr_repos.text = "$public_repos public repositories"
 
-                                    github_user_item.setOnClickListener {
-                                        openUrl(html_url)
+                                        github_user_item.setOnClickListener {
+                                            openUrl(html_url)
+                                        }
                                     }
                                 }
                             }
@@ -146,18 +148,22 @@ class ShowProfileActivity : AppCompatActivity() {
 
         imageRepo.getProfileIconUri(profileId, object : Listener<Uri> {
             override fun onComplete(result: Uri) {
-                Glide.with(this@ShowProfileActivity)
-                        .load(result)
-                        .apply(RequestOptions.circleCropTransform())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(imageView)
+                if (!isFinishing) {
+                    Glide.with(this@ShowProfileActivity)
+                            .load(result)
+                            .apply(RequestOptions.circleCropTransform())
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(imageView)
+                }
             }
 
             override fun onError() {
-                Glide.with(this@ShowProfileActivity)
-                        .load(R.mipmap.ic_launcher_round)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(imageView)
+                if (!isFinishing) {
+                    Glide.with(this@ShowProfileActivity)
+                            .load(R.mipmap.ic_launcher_round)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(imageView)
+                }
             }
         })
 
