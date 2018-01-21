@@ -19,6 +19,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
 import com.wverlaek.cambridgehack.util.Listener
 import java.util.*
+import android.support.annotation.NonNull
+import com.firebase.ui.auth.AuthUI
+
+
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -50,8 +54,7 @@ class ProfileActivity : AppCompatActivity() {
         repo.getProfile(uid, object : ProfileListener {
             override fun retrieveDone(prof: Profile?) {
                 if (prof != null) {
-                    startActivity(intentFor<FaceScanActivity>())
-                    // TODO: start activity real app
+                    startActivity(intentFor<SchijndelActivity>())
                     finish()
                 } else {
                     loadingFrame.visibility = View.GONE
@@ -75,8 +78,7 @@ class ProfileActivity : AppCompatActivity() {
                                         repo.updateProfile(newProf)
 
                                         toast("Created your profile")
-                                        startActivity(intentFor<FaceScanActivity>())
-                                        // TODO: start activity real app
+                                        startActivity(intentFor<SchijndelActivity>())
                                         finish()
                                     }
 
