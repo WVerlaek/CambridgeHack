@@ -26,15 +26,15 @@
                 android:layout_marginBottom="16dp"
                 android:text="Fill out your account info"
                 android:gravity="center"
-                android:textSize="24dip"/>
+                android:textSize="24sp"/>
 
             <TextView android:id="@+id/link_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
-                android:text="Your profile photo:"
+                android:text="Profile photo"
                 android:gravity="center"
-                android:textSize="16dip"/>
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,15 +56,16 @@
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_photo"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_gravity="bottom"
+                android:layout_gravity="bottom|center_horizontal"
                 android:padding="12dp"
-                android:text="Upload selfie"/>
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="Upload profile photo"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -75,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Your organization/university" />
+                    android:hint="Organization / University" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -86,7 +87,7 @@
                 <EditText android:id="@+id/title_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Your title/position" />
+                    android:hint="Title / Position" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -98,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Your LinkedIn name (optional)" />
+                    android:hint="LinkedIn username (optional)" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -110,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Your Github name (optional)" />
+                    android:hint="Github username (optional)" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -122,17 +123,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Your Facebook name (optional)" />
+                    android:hint="Facebook username (optional)" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_submit"
-                android:layout_width="fill_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 android:padding="12dp"
                 android:text="Create profile"
+                android:drawableStart="@drawable/ic_check_white_24dp"
             />
 
         </LinearLayout>

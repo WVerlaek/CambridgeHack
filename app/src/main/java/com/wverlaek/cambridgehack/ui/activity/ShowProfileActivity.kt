@@ -125,7 +125,7 @@ class ShowProfileActivity : AppCompatActivity() {
                                 response.body()?.apply {
                                     github_repos.removeAllViews()
                                     github_featured.visibility = View.VISIBLE
-                                    for (gitRepo in this.take(2)) {
+                                    for (gitRepo in this.take(3)) {
                                         val view = LayoutInflater.from(this@ShowProfileActivity)
                                                 .inflate(R.layout.github_repo_item, github_repos, false)
                                         view.repo_name.text = gitRepo.name
