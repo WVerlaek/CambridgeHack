@@ -18,11 +18,13 @@ import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.wverlaek.cambridgehack.detection.FaceDetection
 import com.wverlaek.cambridgehack.util.Listener
-import org.jetbrains.anko.custom.onUiThread
+import pl.aprilapps.easyphotopicker.EasyImage
 import java.util.*
-import android.support.annotation.NonNull
-import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import pl.aprilapps.easyphotopicker.DefaultCallback
+import java.io.File
+import java.io.FileInputStream
+import kotlin.collections.ArrayList
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -33,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
     private var storage = FirebaseStorage.getInstance()
     private var storageRef = storage.getReference()
     private var mArrayUri = ArrayList<Uri>()
-
+    private var mArrayFiles = ArrayList<File>()
 
     companion object {
         private val UID_TAG = "UID"
@@ -43,10 +45,15 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        EasyImage.configuration(this)
+                .setImagesFolderName("EasyImage sample")
+                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
+                .setCopyPickedImagesToPublicGalleryAppFolder(true)
+                .setAllowMultiplePickInGallery(true);
 
         if (intent == null || !intent.hasExtra(UID_TAG)) return
         uid = intent.getStringExtra(UID_TAG)
@@ -81,8 +88,8 @@ class ProfileActivity : AppCompatActivity() {
                                         toast("Created your profile")
 
                                         val faceDetection = FaceDetection()
-                                        for (uri in mArrayUri) {
-                                            val inputStream = getContentResolver().openInputStream(uri)
+                                        for (image in mArrayFiles) {
+                                            val inputStream = FileInputStream(image)
                                             faceDetection.uploadImage(result,
                                                     object:Listener<Unit?>{
                                                         override fun onComplete(result: Unit?) {
@@ -109,13 +116,7 @@ class ProfileActivity : AppCompatActivity() {
                     }
 
                     btn_photo.setOnClickListener {
-                        val intent = Intent()
-                        intent.type = "image/*"
-                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                        intent.action = Intent.ACTION_GET_CONTENT
-                        val chooserIntent = Intent.createChooser(intent, "Select Image")
-
-                        startActivityForResult(chooserIntent, PICK_IMAGE)
+                        EasyImage.openChooserWithGallery(this@ProfileActivity, "Choose your pictures", PICK_IMAGE);
                     }
                 }
             }
@@ -126,31 +127,33 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         Log.d(TAG, "onActivityResult")
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            mArrayUri = ArrayList()
-            if (data.getData() != null) {
-                val uri: Uri = data.getData()
-                Log.d(TAG, "selected image: " + uri)
-                val ref = storageRef.child("images/" + uid)
-                ref.putFile(uri)
 
-                toast("Your picture is stored ")
-
-                mArrayUri.add(uri)
-            } else if (data.clipData != null) {
-                val mClipData = data.clipData
-
-                for (i in 0 until mClipData.itemCount) {
-                    val item = mClipData.getItemAt(i)
-                    val uri = item.uri
-                    mArrayUri.add(uri)
-                }
-                val ref = storageRef.child("images/" + uid)
-                ref.putFile(mArrayUri.first())
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this,
+                object : DefaultCallback() {
+            override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
+                //Some error handling
+                e!!.printStackTrace()
             }
-            profile_photo.setImageURI(mArrayUri.first())
-        }
+
+            override fun onImagesPicked(imageFiles: List<File>, source: EasyImage.ImageSource, type: Int) {
+                mArrayFiles = ArrayList(imageFiles)
+                val firstUri = android.net.Uri.parse(mArrayFiles.first().toURI().toString())
+                val ref = storageRef.child("images/" + uid)
+                ref.putFile(firstUri)
+                profile_photo.setImageURI(firstUri)
+            }
+
+            override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
+                //Cancel handling, you might wanna remove taken photo if it was canceled
+                if (source == EasyImage.ImageSource.CAMERA) {
+                    val photoFile = EasyImage.lastlyTakenButCanceledPhoto(this@ProfileActivity)
+                    photoFile?.delete()
+                }
+            }
+        })
     }
 }
